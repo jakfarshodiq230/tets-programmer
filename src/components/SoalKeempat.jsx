@@ -15,15 +15,14 @@ const SoalKeempat = () => {
     const fetchJoke = async () => {
         try {
             const response = await fetch("https://official-joke-api.appspot.com/random_joke");
-            if (response.status === 429) {
-                setJoke({ setup: "Rate limit exceeded.", punchline: "Please try again later." });
-                return;
-            }
             const data = await response.json();
             setJoke(data);
         } catch (error) {
-            console.error("Error fetching joke:", error);
-            setJoke({ setup: "Error occurred.", punchline: "Unable to fetch joke." });
+            if (error.message.includes("exceeded the 100 request limit")) {
+                alert("You have exceeded the request limit. Please try again in 15 minutes.");
+            } else {
+                console.error("Error fetching joke:", error);
+            }
         }
     };
 
